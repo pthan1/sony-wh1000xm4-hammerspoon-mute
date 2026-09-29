@@ -40,3 +40,4 @@ open -a Hammerspoon
 echo "Installed the WH-1000XM4 configuration at $target_file"
 echo "Grant Hammerspoon Accessibility permission, enable launch at login, and reload its configuration."
 echo "Then open Teams, press Command+Period, edit Toggle mute to Command+Control+Space, save it, and test the shortcut in a meeting."
+echo "In the Slack desktop app, join a huddle and test its built-in Command+Shift+Space mute shortcut; Slack does not support custom shortcuts."
