@@ -36,6 +36,18 @@ Hammerspoon must have macOS Accessibility permission and must remain running. En
 
 For a model-assisted setup on another Mac, follow [WORK-MAC-INSTALL.md](WORK-MAC-INSTALL.md).
 
+## Configure the Teams mute shortcut
+
+The Hammerspoon configuration sends **Command+Control+Space**, so Teams must use the same combination for **Toggle mute**:
+
+1. Open the Microsoft Teams desktop app.
+2. Press **Command+Period (.)** to open **Keyboard shortcuts**.
+3. Find **Toggle mute** and choose **Edit shortcut**.
+4. Press **Command+Control+Space**, then save the change.
+5. Join a test meeting and confirm that Command+Control+Space toggles mute before testing the headset.
+
+The model-assisted work-Mac procedure includes this setup and verification. It uses Teams' own shortcut editor instead of modifying Teams' internal account data.
+
 ## Audio feedback through the headphones
 
 In macOS System Settings, open **Sound** and set **Play sound effects through** to `WH-1000XM4`. Teams or Slack should also use the headset for its speaker and microphone.
@@ -44,8 +56,9 @@ In macOS System Settings, open **Sound** and set **Play sound effects through** 
 
 1. Disconnect the headset from any phone during the initial test. Multipoint connections can send the gesture to the phone instead of the Mac.
 2. Pause Spotify manually. Outside a call, double-tap the right earcup; Spotify should resume.
-3. Join a test Teams or Slack call and keep that app in front.
-4. Double-tap twice, several seconds apart. Each gesture should toggle mute once, Siri should disappear quickly, and there should be no macOS error sound.
+3. In Teams, first confirm that Command+Control+Space toggles mute. For Slack, confirm the equivalent shortcut is configured.
+4. Join a test Teams or Slack call and keep that app in front.
+5. Double-tap twice, several seconds apart. Each gesture should toggle mute once, Siri should disappear quickly, and there should be no macOS error sound.
 
 ## Notes
 
