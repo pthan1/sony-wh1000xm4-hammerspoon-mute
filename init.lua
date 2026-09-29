@@ -2,11 +2,12 @@
 --
 -- Outside calls, the right-earcup double-tap remains normal play/pause.
 -- During a call, macOS treats that gesture as a Siri/HFP command. The
--- Bluetooth log signal below is used to send Cmd+Ctrl+Space to the app that
--- was active, then Siri is hidden and cancelled with one Escape keystroke.
+-- Bluetooth log signal below is used to send the app's mute shortcut to the
+-- app that was active, then Siri is hidden and cancelled with one Escape.
 
 local HEADSET_NAME = "WH-1000XM4"
 local SIRI_BUNDLE_ID = "com.apple.SiriNCService"
+local SLACK_BUNDLE_ID = "com.tinyspeck.slackmacgap"
 local TRIGGER_TEXT = "Start advertising for process SiriNCService"
 local MIN_TRIGGER_INTERVAL = 1.5
 local CANCEL_DELAY = 0.04
@@ -20,6 +21,18 @@ local function isSonyHeadsetInput()
     return input and input:name():find(HEADSET_NAME, 1, true) ~= nil
 end
 
+local function muteShortcutFor(target)
+    if target
+        and (target:bundleID() == SLACK_BUNDLE_ID or target:name() == "Slack") then
+        -- Slack does not support custom shortcuts. This is its built-in
+        -- desktop-app shortcut for toggling mute in a huddle.
+        return { "cmd", "shift" }, "space", "Cmd+Shift+Space (Slack)"
+    end
+
+    -- Teams is configured to use this shortcut during installation.
+    return { "cmd", "ctrl" }, "space", "Cmd+Ctrl+Space (Teams)"
+end
+
 local function handleSonyCallGesture()
     local now = hs.timer.secondsSinceEpoch()
     if now < xm4SiriArmedAt
@@ -30,11 +43,12 @@ local function handleSonyCallGesture()
 
     xm4SiriLastTrigger = now
     local target = hs.application.frontmostApplication()
+    local modifiers, key, shortcutName = muteShortcutFor(target)
 
     if target then
-        hs.eventtap.keyStroke({ "cmd", "ctrl" }, "space", 0, target)
+        hs.eventtap.keyStroke(modifiers, key, 0, target)
     else
-        hs.eventtap.keyStroke({ "cmd", "ctrl" }, "space", 0)
+        hs.eventtap.keyStroke(modifiers, key, 0)
     end
 
     local siriApps = hs.application.applicationsForBundleID(SIRI_BUNDLE_ID) or {}
@@ -49,7 +63,7 @@ local function handleSonyCallGesture()
         end
     end)
 
-    hs.printf("XM4_SIRI_REMAP sent Cmd+Ctrl+Space and cancelled Siri")
+    hs.printf("XM4_SIRI_REMAP sent %s and cancelled Siri", shortcutName)
 end
 
 xm4SiriTask = hs.task.new(
@@ -85,4 +99,4 @@ xm4SiriTask = hs.task.new(
     }
 ):start()
 
-hs.printf("XM4_SIRI_REMAP active: Cmd+Ctrl+Space with fast Siri cancel")
+hs.printf("XM4_SIRI_REMAP active: Teams Cmd+Ctrl+Space; Slack Cmd+Shift+Space; fast Siri cancel")
