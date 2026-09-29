@@ -1,6 +1,6 @@
 # Sony WH-1000XM4 Hammerspoon mute control
 
-This is a macOS workaround that makes the Sony WH-1000XM4 right-earcup double-tap send **Command+Control+Space** during Teams or Slack calls.
+This is a macOS workaround that makes the Sony WH-1000XM4 right-earcup double-tap send the appropriate mute shortcut during Teams meetings or Slack huddles.
 
 ## Why this exists
 
@@ -8,7 +8,7 @@ Outside calls, the headset sends a normal play/pause command and macOS handles i
 
 The Hammerspoon configuration watches for the narrow Bluetooth log signal produced when that headset gesture starts Siri. It then:
 
-1. Sends Command+Control+Space to the foreground app.
+1. Sends Command+Control+Space to Teams, or Slack's built-in Command+Shift+Space shortcut when Slack is in front.
 2. Hides Siri immediately.
 3. Sends one Escape 40 milliseconds later to end Siri cleanly.
 
@@ -16,7 +16,8 @@ The delay was tuned interactively on a Mac with a WH-1000XM4. It produced no err
 
 ## Behavior
 
-- In a call: double-tap toggles mute through Command+Control+Space.
+- In Teams: double-tap toggles mute through Command+Control+Space.
+- In the Slack desktop app: double-tap toggles huddle mute through Command+Shift+Space.
 - Outside a call: double-tap keeps its normal play/pause behavior.
 - The workaround only runs when the default microphone name contains `WH-1000XM4`.
 - A 1.5-second guard prevents one gesture from toggling mute more than once.
@@ -48,6 +49,12 @@ The Hammerspoon configuration sends **Command+Control+Space**, so Teams must use
 
 The model-assisted work-Mac procedure includes this setup and verification. It uses Teams' own shortcut editor instead of modifying Teams' internal account data.
 
+## Slack huddle shortcut
+
+Slack does not support custom keyboard shortcuts. Its built-in macOS desktop-app shortcut for toggling mute in a huddle is **Command+Shift+Space**. The Hammerspoon configuration detects when Slack is the foreground app and sends that shortcut automatically.
+
+Join a test huddle in the Slack desktop app and confirm Command+Shift+Space toggles mute before testing the headset. No Slack shortcut setting needs to be changed.
+
 ## Audio feedback through the headphones
 
 In macOS System Settings, open **Sound** and set **Play sound effects through** to `WH-1000XM4`. Teams or Slack should also use the headset for its speaker and microphone.
@@ -56,7 +63,7 @@ In macOS System Settings, open **Sound** and set **Play sound effects through** 
 
 1. Disconnect the headset from any phone during the initial test. Multipoint connections can send the gesture to the phone instead of the Mac.
 2. Pause Spotify manually. Outside a call, double-tap the right earcup; Spotify should resume.
-3. In Teams, first confirm that Command+Control+Space toggles mute. For Slack, confirm the equivalent shortcut is configured.
+3. In Teams, first confirm that Command+Control+Space toggles mute. In a Slack desktop huddle, confirm that its built-in Command+Shift+Space shortcut toggles mute.
 4. Join a test Teams or Slack call and keep that app in front.
 5. Double-tap twice, several seconds apart. Each gesture should toggle mute once, Siri should disappear quickly, and there should be no macOS error sound.
 
@@ -64,4 +71,4 @@ In macOS System Settings, open **Sound** and set **Play sound effects through** 
 
 - This depends on an undocumented macOS Bluetooth log message and may need adjustment after a macOS update.
 - Do not map `NSSystemDefined` subtype `7`; on the tested Mac those events were auxiliary mouse-button events, not the headset.
-- The destination shortcut is near the top of `init.lua` in `handleSonyCallGesture()`. Change `{ "cmd", "ctrl" }, "space"` if the work Mac uses a different mute shortcut.
+- App-specific shortcuts are selected by `muteShortcutFor()` in `init.lua`. Teams uses Command+Control+Space; Slack uses its fixed Command+Shift+Space shortcut.
