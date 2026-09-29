@@ -4,7 +4,7 @@ Give the model session the URL of this repository and the prompt below.
 
 ## Prompt to paste
 
-> Install and configure the Hammerspoon setup from the GitHub repository I provided. The goal is for a Sony WH-1000XM4 right-earcup double-tap to send Command+Control+Space during a Teams or Slack call, close Siri quickly, and preserve normal play/pause outside calls. Inspect any existing `~/.hammerspoon/init.lua` before changing it. Back it up and merge the repository configuration instead of overwriting unrelated settings. Install Hammerspoon if needed, help me approve the required macOS permissions, enable launch at login, reload the configuration, and test interactively with me. Keep the headset disconnected from my phone during the first test. Do not map `NSSystemDefined` subtype 7 because it may be an auxiliary mouse event. If the Bluetooth trigger differs on this Mac, temporarily inspect the filtered Bluetooth/Siri log, adapt the narrow trigger, and remove the temporary logger after testing. Also set macOS “Play sound effects through” to the WH-1000XM4 so mute feedback is heard in the headphones.
+> Install and configure the Hammerspoon setup from the GitHub repository I provided. The goal is for a Sony WH-1000XM4 right-earcup double-tap to send Command+Control+Space during a Teams or Slack call, close Siri quickly, and preserve normal play/pause outside calls. Inspect any existing `~/.hammerspoon/init.lua` before changing it. Back it up and merge the repository configuration instead of overwriting unrelated settings. Install Hammerspoon if needed, help me approve the required macOS permissions, enable launch at login, reload the configuration, and test interactively with me. In the Microsoft Teams desktop app, open Keyboard shortcuts with Command+Period, find Toggle mute, edit it to Command+Control+Space, save it, and verify the shortcut in a test meeting. Do this through Teams' supported shortcut editor rather than modifying private Teams data. Keep the headset disconnected from my phone during the first test. Do not map `NSSystemDefined` subtype 7 because it may be an auxiliary mouse event. If the Bluetooth trigger differs on this Mac, temporarily inspect the filtered Bluetooth/Siri log, adapt the narrow trigger, and remove the temporary logger after testing. Also set macOS “Play sound effects through” to the WH-1000XM4 so mute feedback is heard in the headphones.
 
 ## Expected installation procedure
 
@@ -21,14 +21,18 @@ Give the model session the URL of this repository and the prompt below.
    XM4_SIRI_REMAP active: Cmd+Ctrl+Space with fast Siri cancel
    ```
 
-9. In **System Settings → Sound**, set **Play sound effects through** to `WH-1000XM4`.
-10. In Teams or Slack, select the WH-1000XM4 for both microphone and speaker, and confirm Command+Control+Space toggles mute from the keyboard.
-11. Test normal play/pause outside a call, then test mute inside a call. Use two headset double-taps several seconds apart.
+9. Open the Microsoft Teams desktop app and press **Command+Period (.)** to open **Keyboard shortcuts**.
+10. Find **Toggle mute**, choose **Edit shortcut**, press **Command+Control+Space**, and save the change. If Teams reports a conflict, resolve it in the shortcut editor instead of silently choosing a different combination.
+11. Join a Teams test meeting and verify that Command+Control+Space toggles mute from the keyboard. Do not continue to the headset test until this works.
+12. In **System Settings → Sound**, set **Play sound effects through** to `WH-1000XM4`.
+13. In Teams or Slack, select the WH-1000XM4 for both microphone and speaker. If Slack is also required, configure and verify its mute shortcut separately.
+14. Test normal play/pause outside a call, then test mute inside a call. Use two headset double-taps several seconds apart.
 
 ## Success criteria
 
 - Outside a call, the right-earcup double-tap still plays or pauses media.
 - During a Teams or Slack call, each double-tap toggles mute once.
+- In Teams, **Toggle mute** is saved as Command+Control+Space and the keyboard shortcut works before the headset is tested.
 - Siri disappears quickly and does not remain listening.
 - There is no macOS error sound.
 - Mute/unmute feedback is heard through the headphones.
